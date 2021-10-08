@@ -9,33 +9,23 @@ _LOADED_PARTIES = {}  # dict of available parties
 _PARTY_NUMBER = 0  # index of the last created party
 
 
-# TODO: complete the decoration
-@parties.route("/parties")
+@parties.route("/parties", methods = ['GET','POST'])
 def all_parties():
     result = None
     if request.method == 'POST':
         try:
-            result = 0
-            # TODO: create a party
+            result = create_party(request)
         except CannotPartyAloneError:
-            result = 0
-            # TODO: return 400
+            abort(400)
 
     elif request.method == 'GET':
-        result = 0
-        # TODO: get all the parties
-
+        result = get_all_parties()
     return result
 
-
-# TODO: complete the decoration
-@parties.route("/parties/loaded")
+@parties.route("/parties/loaded", methods = ['POST','GET'])
 def loaded_parties():
-    return _PARTY_NUMBER
-    # TODO: returns the number of parties currently loaded in the system
+    return {'loaded_parties' : len(_LOADED_PARTIES)}
 
-
-# TODO: complete the decoration
 @parties.route("/party/<id>")
 def single_party(id):
     global _LOADED_PARTIES
@@ -125,3 +115,4 @@ def exists_party(_id):
         abort(404)  # error 404: Not Found, i.e. wrong URL, resource does not exist
     elif not(_id in _LOADED_PARTIES):
         abort(410)  # error 410: Gone, i.e. it existed but it's not there anymore
+
