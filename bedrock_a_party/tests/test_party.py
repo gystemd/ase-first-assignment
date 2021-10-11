@@ -157,6 +157,7 @@ class TestApp(unittest.TestCase):
         })
 
         # remove food
-        reply = app.delete('/party/2/foodlist/Francesco/pizza', content_type='application/json')
+        reply = app.delete('/party/2/foodlist/Francesco/pizza',
+                           content_type='application/json')
         body = json.loads(str(reply.data, 'utf8'))
         self.assertEqual(body["msg"], "Food deleted!")

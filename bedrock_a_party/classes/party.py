@@ -28,7 +28,9 @@ class FoodList():
     def add(self, food, user):
         to_add = Food(food, user)
         if to_add in self.foodlist:
-            raise ItemAlreadyInsertedByUser(user + " already committed to bring " + food)
+            raise ItemAlreadyInsertedByUser(user +
+                                            " already committed to bring " +
+                                            food)
         self.foodlist.append(to_add)
         return to_add
 
@@ -37,7 +39,9 @@ class FoodList():
         try:
             self.foodlist.remove(to_remove)
         except ValueError:
-            raise NotExistingFoodError("user " + user + " has not added " + food + " to this party foodlist")
+            raise NotExistingFoodError("user " + user +
+                                       " has not added " +
+                                       food + " to this party foodlist")
 
     def serialize(self):
         return [f.serialize() for f in self.foodlist]
@@ -52,7 +56,9 @@ class Party:
 
     def __init__(self, _id, guests):
         if len(guests) == 0:
-            raise CannotPartyAloneError("You cannot create a party without guests")
+            raise CannotPartyAloneError(
+                "You cannot create a party without guests"
+            )
 
         self.id = _id
         self.guests = guests
