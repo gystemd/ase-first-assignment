@@ -1,5 +1,6 @@
 from flakon import JsonBlueprint
 from flask import abort, jsonify, request
+from flask.wrappers import Response
 
 from bedrock_a_party.classes.party import CannotPartyAloneError, Party
 
@@ -22,24 +23,23 @@ def all_parties():
         result = get_all_parties()
     return result
 
-@parties.route("/parties/loaded", methods = ['POST','GET'])
+@parties.route("/parties/loaded", methods = ['GET'])
 def loaded_parties():
     return {'loaded_parties' : len(_LOADED_PARTIES)}
 
-@parties.route("/party/<id>")
+@parties.route("/party/<id>", methods = ['GET','DELETE'])
 def single_party(id):
     global _LOADED_PARTIES
     result = ""
 
-    # TODO: check if the party is an existing one
+    exists_party(id)
 
     if 'GET' == request.method:
-        result = 0
-        # TODO: retrieve a party
+        result = jsonify(_LOADED_PARTIES.get(id).serialize())
 
     elif 'DELETE' == request.method:
-        result = 0
-        # TODO: delete a party
+        _LOADED_PARTIES.pop(id)
+        result = ('', 200)
 
     return result
 
